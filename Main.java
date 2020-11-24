@@ -20,7 +20,7 @@ public class Main extends JFrame implements ActionListener{
 	
 	//Panels
 	Button file = new Button("File");
-	Button about = new Button("About");
+	MenuItem about = new MenuItem("About");
 	
 	
 	public Main() {
@@ -40,8 +40,8 @@ public class Main extends JFrame implements ActionListener{
 		
 		//Top panel
 		JPanel top = new JPanel();		
-		top.add(file);
-		top.add(about);
+		//top.add(file);
+		//top.add(about);
 		
 		this.add(top,BorderLayout.NORTH);
 	
@@ -50,6 +50,24 @@ public class Main extends JFrame implements ActionListener{
 		 */
 		//Middle
 		JPanel middle = new JPanel();
+		
+		
+		 MenuBar mb=new MenuBar();  
+         Menu menu=new Menu("File");  
+         Menu menu2 = new Menu("About");
+         menu2.add(about);
+         //All of these need to be replaced with MenuItems
+         MenuItem i1=new MenuItem("Load a Roaster");  
+         MenuItem i2=new MenuItem("Add Attendence");  
+         MenuItem i3=new MenuItem("Save");  
+         MenuItem i4=new MenuItem("Plot data");  
+         menu.add(i1);  
+         menu.add(i2);  
+         menu.add(i3); 
+         menu.add(i4);
+         mb.add(menu);  
+         mb.add(menu2);
+         this.setMenuBar(mb);  
 				
 	}
 	
