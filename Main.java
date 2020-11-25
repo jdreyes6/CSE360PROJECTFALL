@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 
 /* 
  * Description: Main GUI for the final project
@@ -21,6 +22,7 @@ public class Main extends JFrame implements ActionListener{
 	//Panels
 	Button file = new Button("File");
 	MenuItem about = new MenuItem("About");
+	MenuItem load = new MenuItem("Load a Roaster");
 	
 	
 	public Main() {
@@ -57,7 +59,9 @@ public class Main extends JFrame implements ActionListener{
          Menu menu2 = new Menu("About");
          menu2.add(about);
          //All of these need to be replaced with MenuItems
-         MenuItem i1=new MenuItem("Load a Roaster");  
+         MenuItem i1=new MenuItem("Load a Roaster"); 
+         i1 actionLoad = new i1();
+         i1.addActionListener(actionLoad);
          MenuItem i2=new MenuItem("Add Attendence");  
          MenuItem i3=new MenuItem("Save");  
          MenuItem i4=new MenuItem("Plot data");  
@@ -68,10 +72,36 @@ public class Main extends JFrame implements ActionListener{
          mb.add(menu);  
          mb.add(menu2);
          this.setMenuBar(mb);  
+         
+         
+      
 				
 	}
 	
+	
+	public class i1 implements ActionListener
+	{
 
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			getFile();
+			
+		}
+		
+	}
+
+	
+	private static java.io.File getFile(){
+	    JFileChooser fc = new JFileChooser();
+	    java.io.File file = null;
+	    int returnVal = fc.showOpenDialog(null);
+
+	    if (returnVal == JFileChooser.APPROVE_OPTION) {
+	        file = fc.getSelectedFile();  
+	    } 
+	    return file;
+	}
 
 	//File ActionListener
 	public class File implements ActionListener {
