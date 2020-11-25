@@ -4,7 +4,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
+//import javax.swing.filechooser.FileSystemView;
+import javax.swing.filechooser.*;
+import java.io.*;
 
 /* 
  * Description: Main GUI for the final project
@@ -60,9 +62,9 @@ public class Main extends JFrame implements ActionListener{
          menu2.add(about);
          //All of these need to be replaced with MenuItems
          MenuItem i1=new MenuItem("Load a Roaster"); 
-         i1 actionLoad = new i1();
+		 i1 actionLoad = new i1();
          i1.addActionListener(actionLoad);
-         MenuItem i2=new MenuItem("Add Attendence");  
+		 MenuItem i2=new MenuItem("Add Attendence");  
          MenuItem i3=new MenuItem("Save");  
          MenuItem i4=new MenuItem("Plot data");  
          menu.add(i1);  
@@ -73,34 +75,71 @@ public class Main extends JFrame implements ActionListener{
          mb.add(menu2);
          this.setMenuBar(mb);  
          
-         
       
 				
 	}
 	
 	
-	public class i1 implements ActionListener
+	public class i1 implements ActionListener 
 	{
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			getFile();
+			System.out.print("test");
+			//getFile(); // uncomment this to see a csv file read
+			table();
+
 			
+
 		}
-		
+		public void table()
+		{
+			// Copy and paste this whole section into main to see how table works and looks
+			setLayout(new FlowLayout());
+			
+			String[] columnNames = {"1", "2", "3", "4", "5", "6"};
+			Object[][] data1 = {{"bruh1", "bruh2", "bruh3", "bruh4", "bruh5", "bruh6"}};
+
+			JTable table = new JTable(data1, columnNames);
+			table.setPreferredScrollableViewportSize(new Dimension (500, 50));
+			table.setFillsViewportHeight(true);
+
+			JScrollPane scrollPane = new JScrollPane(table);
+			add(scrollPane);
+		}
 	}
 
 	
 	private static java.io.File getFile(){
-	    JFileChooser fc = new JFileChooser();
-	    java.io.File file = null;
-	    int returnVal = fc.showOpenDialog(null);
+		JFileChooser fc = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV FILES", "csv"); // filter only csv files
+		fc.setFileFilter(filter);
+
+	    java.io.File filePath = null;
+		int returnVal = fc.showOpenDialog(null);
+		String line = "";
 
 	    if (returnVal == JFileChooser.APPROVE_OPTION) {
-	        file = fc.getSelectedFile();  
+			filePath = fc.getSelectedFile();  // gets file path of selected file
+			try {
+				BufferedReader br = new BufferedReader(new FileReader(filePath));
+
+				while ((line = br.readLine()) != null)
+				{
+					System.out.println(line);
+					String[] rowData = line.split(","); // parses data based on ,
+					//Object[][] data = { {rowData[0]}, {rowData[1]}, {rowData[2]}, {rowData[3]}, {rowData[4]}, {rowData[5]} };
+				}
+			} catch (FileNotFoundException exception) {
+				exception.printStackTrace();
+			} catch (IOException exception) {
+				exception.printStackTrace();
+			}
+			System.out.println(filePath);
+			//System.out.println(rowData[0]);
 	    } 
-	    return file;
+	    return filePath; // ideally return data for table .?
 	}
 
 	//File ActionListener
