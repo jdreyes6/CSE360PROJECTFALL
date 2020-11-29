@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 //import javax.swing.filechooser.FileSystemView;
 import javax.swing.filechooser.*;
+import javax.swing.table.DefaultTableCellRenderer;
+
 import java.io.*;
 
 /* 
@@ -86,51 +88,73 @@ public class Main extends JFrame implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			System.out.print("test");
-			//getFile(); // uncomment this to see a csv file read
-			table();
-
-			
-
+			System.out.print("test1");
+			String[][] rows= getFile(); // uncomment this to see a csv file read
+			table(rows);
+			repaint();
+	        revalidate();
 		}
-		public void table()
+		
+		public void table(String[][] rows)
 		{
 			// Copy and paste this whole section into main to see how table works and looks
 			setLayout(new FlowLayout());
-			
-			String[] columnNames = {"1", "2", "3", "4", "5", "6"};
-			Object[][] data1 = {{"bruh1", "bruh2", "bruh3", "bruh4", "bruh5", "bruh6"}};
-
-			JTable table = new JTable(data1, columnNames);
-			table.setPreferredScrollableViewportSize(new Dimension (500, 50));
+			System.out.println("table");
+			String[] columnNames = {"ID", "First Name", "Last Name", "Program and Plan", "Academic Level", "ASURITE"};
+			JTable table = new JTable(rows, columnNames);
+			DefaultTableCellRenderer hr = new DefaultTableCellRenderer();
+			hr.setHorizontalAlignment(JLabel.LEFT);
+			table.getTableHeader().setDefaultRenderer(hr);
+			table.setPreferredScrollableViewportSize(new Dimension (800, 300));
 			table.setFillsViewportHeight(true);
-
+			table.getColumnModel().getColumn(0).setPreferredWidth(300);
+			table.getColumnModel().getColumn(1).setPreferredWidth(210);
+			table.getColumnModel().getColumn(2).setPreferredWidth(210);
+			table.getColumnModel().getColumn(3).setPreferredWidth(460);
+			table.getColumnModel().getColumn(4).setPreferredWidth(400);
+			table.getColumnModel().getColumn(5).setPreferredWidth(200);
 			JScrollPane scrollPane = new JScrollPane(table);
 			add(scrollPane);
 		}
 	}
 
 	
-	private static java.io.File getFile(){
+	private static String[][] getFile(){
 		JFileChooser fc = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV FILES", "csv"); // filter only csv files
 		fc.setFileFilter(filter);
-
-	    java.io.File filePath = null;
+		java.io.File filePath = null;
 		int returnVal = fc.showOpenDialog(null);
 		String line = "";
 
 	    if (returnVal == JFileChooser.APPROVE_OPTION) {
 			filePath = fc.getSelectedFile();  // gets file path of selected file
+			System.out.println(filePath);
 			try {
+				System.out.println("br");
 				BufferedReader br = new BufferedReader(new FileReader(filePath));
-
+				int rowNumber=0;
 				while ((line = br.readLine()) != null)
 				{
 					System.out.println(line);
-					String[] rowData = line.split(","); // parses data based on ,
-					//Object[][] data = { {rowData[0]}, {rowData[1]}, {rowData[2]}, {rowData[3]}, {rowData[4]}, {rowData[5]} };
+					rowNumber++;
 				}
+				System.out.println(rowNumber);
+				String[][] totalData=new String[rowNumber][6];
+				BufferedReader br1 = new BufferedReader(new FileReader(filePath));
+				for(int currentRow=0;currentRow<rowNumber;currentRow++)
+				{
+					line=br1.readLine();
+					System.out.println(line);
+					String[] rowData = line.split(","); // parses data based on ,
+					//System.out.println(rowData.getClass().getTypeName());
+					for(int i=0;i<6;i++) {
+						System.out.println(rowData[i]);
+						totalData[currentRow][i]=rowData[i];
+					}
+				}
+				System.out.println("return");
+				return totalData;
 			} catch (FileNotFoundException exception) {
 				exception.printStackTrace();
 			} catch (IOException exception) {
@@ -138,10 +162,13 @@ public class Main extends JFrame implements ActionListener{
 			}
 			System.out.println(filePath);
 			//System.out.println(rowData[0]);
-	    } 
-	    return filePath; // ideally return data for table .?
+	    }
+	   
+	    System.out.println("wrong");
+	    return null; // ideally return data for table .?
 	}
 
+	
 	//File ActionListener
 	public class File implements ActionListener {
 		
