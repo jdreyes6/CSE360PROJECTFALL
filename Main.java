@@ -9,6 +9,7 @@ import javax.swing.filechooser.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableModel;
 
 import java.io.*;
 
@@ -34,6 +35,7 @@ public class Main extends JFrame implements ActionListener{
     String[][] firstRead;
     JScrollPane scrollPane1;
     JTable smallTable;
+    JTable new_table;
 
 
     public Main() {
@@ -58,12 +60,6 @@ public class Main extends JFrame implements ActionListener{
 
         this.add(top,BorderLayout.NORTH);
 
-        /*
-         * This is for the roster to open up
-         */
-        //Middle
-        JPanel middle = new JPanel();
-
 
         MenuBar mb=new MenuBar();
         Menu menu=new Menu("File");
@@ -77,6 +73,8 @@ public class Main extends JFrame implements ActionListener{
         i2 atendLoad = new i2();
         i2.addActionListener(atendLoad);
         MenuItem i3=new MenuItem("Save");
+        i3 save = new i3();
+        i3.addActionListener(save);
         MenuItem i4=new MenuItem("Plot data");
         menu.add(i1);
         menu.add(i2);
@@ -90,7 +88,7 @@ public class Main extends JFrame implements ActionListener{
 
     }
 
-
+    //Actionlisterner for the for the Load Roaster
     public class i1 implements ActionListener
     {
 
@@ -126,7 +124,6 @@ public class Main extends JFrame implements ActionListener{
             add(scrollPane1);
         }
     }
-
 
     private static String[][] getRosterFile(){
         JFileChooser fc = new JFileChooser();
@@ -177,7 +174,6 @@ public class Main extends JFrame implements ActionListener{
         return null; // ideally return data for table .?
     }
 
-
     //File ActionListener
     public class File implements ActionListener {
 
@@ -220,6 +216,8 @@ public class Main extends JFrame implements ActionListener{
 
 
     }
+   
+    //Actionlistener for Add Attendance tab
     public class i2 implements ActionListener
     {
 
@@ -246,6 +244,7 @@ public class Main extends JFrame implements ActionListener{
             model = new DefaultTableModel(attendRows, columnNames);
             model.addColumn("Date");
             JTable table2 = new JTable(model);
+            new_table = table2; 				//This is to access table 2 for the save file
             table2.setPreferredScrollableViewportSize(new Dimension (800, 300));
             table2.setFillsViewportHeight(true);
             table2.getColumnModel().getColumn(0).setPreferredWidth(200);
@@ -297,6 +296,54 @@ public class Main extends JFrame implements ActionListener{
             JScrollPane scrollPane = new JScrollPane(smallTable);
             add(scrollPane);
         }
+    }
+    
+    //Actionlistener for save button 
+    public class i3 implements ActionListener
+    {
+    	@Override
+    	public void actionPerformed(ActionEvent e) {
+    		System.out.print("test3");
+    		
+    		System.out.print("Did it Work?");
+    		
+    		//If we have a certain file that we want to save it to
+    		//Change "Book2.csv" to the csv file that reupdate it to
+    		exportToCSV(new_table, "Book2.csv");
+  
+    		
+    	}
+    	
+    	public boolean exportToCSV(JTable table, String file) {
+    		try {
+
+    	        TableModel model = table.getModel();
+    	        FileWriter csv = new FileWriter(file);
+
+    	        for (int i = 0; i < model.getColumnCount(); i++) {
+    	            csv.write(model.getColumnName(i) + ",");
+    	        }
+
+    	        csv.write("\n");
+
+    	        for (int i = 0; i < model.getRowCount(); i++) {
+    	            for (int j = 0; j < model.getColumnCount(); j++) {
+    	                csv.write(model.getValueAt(i, j).toString() + ",");
+    	            }
+    	            csv.write("\n");
+    	        }
+    	        System.out.print("Worked");
+    	        csv.close();
+    	        return true;
+    	        
+    	        
+    	    } catch (IOException e) {
+    	        e.printStackTrace();
+    	    }
+    		
+    		 System.out.print("did NOT Worked");
+    	    return false;
+    	}
     }
 
     private static String[][] getAttendanceFile(){
@@ -353,6 +400,10 @@ public class Main extends JFrame implements ActionListener{
     	  table.moveColumn(table.getColumnCount()-1, col_Index);
     	  }
 
+    //ActionListener for the Save
+    
+    
+   
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -367,6 +418,6 @@ public class Main extends JFrame implements ActionListener{
         // TODO Auto-generated method stub
 
     }
-
-
+    
 }
+
