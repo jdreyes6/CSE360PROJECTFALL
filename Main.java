@@ -93,9 +93,7 @@ public class Main extends JFrame implements ActionListener{
         mb.add(menu);
         mb.add(menu2);
         this.setMenuBar(mb);
-
-
-
+        this.setLocationRelativeTo(null);
     }
 
 
@@ -213,17 +211,32 @@ public class Main extends JFrame implements ActionListener{
         //Pop-up for the File option
         public void actionPerformed(ActionEvent e) {
             JFrame about = new JFrame("About");
-            about.setSize(500,300);
+            JDialog info = new JDialog(about, "About"); 
+            JLabel first = new JLabel("Team members:"); 
+            first.setBounds(100, 37, 300, 15);
+            JLabel second = new JLabel("Jianlei Jiang");
+            second.setBounds(100, 65, 300, 15);
+            JLabel third = new JLabel("Keyth Ybanez");
+            third.setBounds(100, 80, 300, 15);
+            JLabel forth = new JLabel("Jason Reyes");
+            forth.setBounds(100, 95, 300, 15);
+            JLabel fifth = new JLabel("Joel Woodyard");
+            fifth.setBounds(100, 110, 300, 15);
+            JLabel sixth = new JLabel("Haomiao Liu");
+            sixth.setBounds(100, 125, 300, 15);
+            JLabel seventh = new JLabel("");
+            about.add(first); 
+            about.add(second);
+            about.add(third);
+            about.add(forth);
+            about.add(fifth);
+            about.add(sixth);
+            about.add(seventh);
+            about.setSize(400, 400); 
+            about.setLocationRelativeTo(null);
 
-            //Prints out this sample text
-            String about_info = "This program will keep track of the students \n"
-                    + "who are participating in class. \n"
-                    + "As well as it will show a plotted data of the attendance. \n";
-            JOptionPane optionPane = new JOptionPane();
-            optionPane.setMessage(about_info);
-            about.add(optionPane);
-
-            about.setVisible(true);
+            // set visibility of dialog 
+            about.setVisible(true);     
         }
 
 
@@ -295,20 +308,35 @@ public class Main extends JFrame implements ActionListener{
                 JDialog d = new JDialog(f, "Report"); 
                 JLabel first = new JLabel("Data loaded for " + users + " users in the roster."); 
                 users = 0;
-                first.setBounds(86, 37, 300, 10);
+                first.setBounds(86, 37, 300, 15);
                 JLabel second = new JLabel(aditional +" aditional attendee was found.");
-                aditional = 0;
                 counted = 0;
-                second.setBounds(86, 80, 300, 10);
+                second.setBounds(86, 80, 300, 15);
                 JLabel third = new JLabel("");
-                third.setBounds(86, 130, 300, 10);
+                String temp = "";
+                int holder = 0;
+                if(aditional > 0)
+                {
+                	for(int y = 0; y < smallTable.getRowCount(); y++)
+                	{
+                		if(smallTable.getValueAt(y, 1) != "")
+                		{
+                			temp = (String) smallTable.getValueAt(y, 0);
+                			holder = Integer.parseInt((String) smallTable.getValueAt(y, 1));
+                		}
+                	}
+                	third = new JLabel(temp + ", connected for " + holder + " minutes");
+                }
+                third.setBounds(86, 130, 300, 15);
+                aditional = 0;
+                third.setBounds(86, 130, 300, 15);
                 JLabel forth = new JLabel("");
                 d.add(first); 
                 d.add(second);
                 d.add(third);
                 d.add(forth);
                 d.setSize(400, 400); 
-                
+                d.setLocationRelativeTo(null);
                 // set visibility of dialog 
                 d.setVisible(true); 
         	}
@@ -377,20 +405,35 @@ public class Main extends JFrame implements ActionListener{
             JDialog d = new JDialog(f, "Report"); 
             JLabel first = new JLabel("Data loaded for " + users + " users in the roster."); 
             users = 0;
-            first.setBounds(86, 37, 300, 10);
-            JLabel second = new JLabel(aditional +" aditional attendee was found.");
-            aditional = 0;
+            first.setBounds(86, 37, 300, 15);
+            JLabel second = new JLabel(aditional +" aditional attendee was found:");
             counted = 0;
-            second.setBounds(86, 80, 300, 10);
+            second.setBounds(86, 80, 300, 15);
             JLabel third = new JLabel("");
-            third.setBounds(86, 130, 300, 10);
+            String temp = "";
+            int holder = 0;
+            if(aditional > 0)
+            {
+            	for(int y = 0; y < smallTable.getRowCount(); y++)
+            	{
+            		if(smallTable.getValueAt(y, 1) != "")
+            		{
+            			temp = (String) smallTable.getValueAt(y, 0);
+            			holder = Integer.parseInt((String) smallTable.getValueAt(y, 1));
+            		}
+            	}
+            	third = new JLabel(temp + ", connected for " + holder + " minutes");
+            }
+            third.setBounds(86, 130, 300, 15);
+            aditional = 0;
             JLabel forth = new JLabel("");
             d.add(first); 
             d.add(second);
             d.add(third);
             d.add(forth);
             d.setSize(400, 400); 
-            
+            d.setLocationRelativeTo(null);
+
             // set visibility of dialog 
             d.setVisible(true); 
             
