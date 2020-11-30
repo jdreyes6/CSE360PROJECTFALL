@@ -7,6 +7,8 @@ import javax.swing.*;
 //import javax.swing.filechooser.FileSystemView;
 import javax.swing.filechooser.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import java.io.*;
 
@@ -27,6 +29,11 @@ public class Main extends JFrame implements ActionListener{
     Button file = new Button("File");
     MenuItem about = new MenuItem("About");
     MenuItem load = new MenuItem("Load a Roaster");
+    JTable table;
+    DefaultTableModel model;
+    String[][] firstRead;
+    JScrollPane scrollPane1;
+    JTable smallTable;
 
 
     public Main() {
@@ -91,8 +98,8 @@ public class Main extends JFrame implements ActionListener{
         public void actionPerformed(ActionEvent e)
         {
             System.out.print("test1");
-            String[][] rows= getRosterFile(); // uncomment this to see a csv file read
-            table(rows);
+            firstRead= getRosterFile(); // uncomment this to see a csv file read
+            table(firstRead);
             repaint();
             revalidate();
         }
@@ -103,20 +110,20 @@ public class Main extends JFrame implements ActionListener{
             setLayout(new FlowLayout());
             System.out.println("table");
             String[] columnNames = {"ID", "First Name", "Last Name", "Program and Plan", "Academic Level", "ASURITE"};
-            JTable table = new JTable(rows, columnNames);
+            table = new JTable(rows, columnNames);
             DefaultTableCellRenderer hr = new DefaultTableCellRenderer();
             hr.setHorizontalAlignment(JLabel.LEFT);
             table.getTableHeader().setDefaultRenderer(hr);
             table.setPreferredScrollableViewportSize(new Dimension (800, 300));
             table.setFillsViewportHeight(true);
-            table.getColumnModel().getColumn(0).setPreferredWidth(300);
-            table.getColumnModel().getColumn(1).setPreferredWidth(210);
-            table.getColumnModel().getColumn(2).setPreferredWidth(210);
+            table.getColumnModel().getColumn(0).setPreferredWidth(200);
+            table.getColumnModel().getColumn(1).setPreferredWidth(160);
+            table.getColumnModel().getColumn(2).setPreferredWidth(160);
             table.getColumnModel().getColumn(3).setPreferredWidth(460);
-            table.getColumnModel().getColumn(4).setPreferredWidth(400);
-            table.getColumnModel().getColumn(5).setPreferredWidth(200);
-            JScrollPane scrollPane = new JScrollPane(table);
-            add(scrollPane);
+            table.getColumnModel().getColumn(4).setPreferredWidth(300);
+            table.getColumnModel().getColumn(5).setPreferredWidth(180);
+            scrollPane1 = new JScrollPane(table);
+            add(scrollPane1);
         }
     }
 
@@ -221,7 +228,9 @@ public class Main extends JFrame implements ActionListener{
         {
             System.out.print("test2");
             String[][] attendRows= getAttendanceFile(); // uncomment this to see a csv file read
-            attendTable(attendRows);
+            attendTable2(attendRows);
+            attendTable(firstRead);
+            scrollPane1.removeAll();
             repaint();
             revalidate();
         }
@@ -230,17 +239,62 @@ public class Main extends JFrame implements ActionListener{
         {
             // Copy and paste this whole section into main to see how table works and looks
             setLayout(new FlowLayout());
+            JFrame frame = new JFrame("Inserting a Column Example!");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            System.out.println("attendTable");
+            String[] columnNames = {"ID", "First Name", "Last Name", "Program and Plan", "Academic Level", "ASURITE"};
+            model = new DefaultTableModel(attendRows, columnNames);
+            model.addColumn("Date");
+            JTable table2 = new JTable(model);
+            table2.setPreferredScrollableViewportSize(new Dimension (800, 300));
+            table2.setFillsViewportHeight(true);
+            table2.getColumnModel().getColumn(0).setPreferredWidth(200);
+            table2.getColumnModel().getColumn(1).setPreferredWidth(160);
+            table2.getColumnModel().getColumn(2).setPreferredWidth(160);
+            table2.getColumnModel().getColumn(3).setPreferredWidth(460);
+            table2.getColumnModel().getColumn(4).setPreferredWidth(300);
+            table2.getColumnModel().getColumn(5).setPreferredWidth(180);
+
+            positionColumn(table2,6);
+            
+            for(int x = 0; x < table2.getRowCount(); x++)
+            {
+            	table2.setValueAt("", x, 6);
+            }
+      
+            //table2.setValueAt("7", 1, 6);
+            for(int x = 0; x < table2.getRowCount(); x++)
+            {
+            	for(int y = 0; y < smallTable.getRowCount(); y++)
+            	{
+            		if(table2.getValueAt(x, 5).equals(smallTable.getValueAt(y, 0)))
+                	{
+            			if(table2.getValueAt(x, 6).equals(""))
+            			{
+            				table2.setValueAt(smallTable.getValueAt(y, 1), x, 6);
+            			}
+            			else
+            			{
+            				table2.setValueAt(Integer.toString(Integer.parseInt((String) smallTable.getValueAt(y, 1)) + Integer.parseInt((String) table2.getValueAt(x, 6))), x, 6);
+            			}
+                	}
+            	}
+            }
+            
+            //JDialog d = new JDialog(f, "dialog Box"); 
+            
+            JScrollPane scrollPane = new JScrollPane(table2);
+            add(scrollPane);
+        }
+        
+        public void attendTable2(String[][] attendRows)
+        {
+            // Copy and paste this whole section into main to see how table works and looks
+            setLayout(new FlowLayout());
             System.out.println("attendTable");
             String[] columnNames = {"ASU ID", "time"};
-            JTable table = new JTable(attendRows, columnNames);
-            DefaultTableCellRenderer hr = new DefaultTableCellRenderer();
-            hr.setHorizontalAlignment(JLabel.LEFT);
-            table.getTableHeader().setDefaultRenderer(hr);
-            table.setPreferredScrollableViewportSize(new Dimension (800, 300));
-            table.setFillsViewportHeight(true);
-            table.getColumnModel().getColumn(0).setPreferredWidth(300);
-            table.getColumnModel().getColumn(1).setPreferredWidth(300);
-            JScrollPane scrollPane = new JScrollPane(table);
+            smallTable = new JTable(attendRows, columnNames);
+            JScrollPane scrollPane = new JScrollPane(smallTable);
             add(scrollPane);
         }
     }
@@ -271,11 +325,11 @@ public class Main extends JFrame implements ActionListener{
                 for(int currentRow=0;currentRow<rowNumber;currentRow++)
                 {
                     line=br1.readLine();
-                    System.out.println(line);
+                    //System.out.println(line);
                     String[] rowData = line.split(","); // parses data based on ,
                     //System.out.println(rowData.getClass().getTypeName());
                     for(int i=0;i<2;i++) {
-                        System.out.println(rowData[i]);
+                        //System.out.println(rowData[i]);
                         totalData[currentRow][i]=rowData[i];
                     }
                 }
@@ -294,6 +348,10 @@ public class Main extends JFrame implements ActionListener{
         return null; // ideally return data for table .?
     }
 
+    
+    public void positionColumn(JTable table,int col_Index) {
+    	  table.moveColumn(table.getColumnCount()-1, col_Index);
+    	  }
 
 
     public static void main(String[] args) {
