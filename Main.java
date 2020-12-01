@@ -1,22 +1,41 @@
 package project01;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 //import javax.swing.filechooser.FileSystemView;
-import javax.swing.filechooser.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
-import org.jfree.chart.ChartFactory;  
-import org.jfree.chart.ChartPanel;  
-import org.jfree.chart.JFreeChart;  
-import org.jfree.chart.plot.XYPlot;  
-import org.jfree.data.xy.XYDataset;  
-import org.jfree.data.xy.XYSeries;  
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;  
 
 
@@ -68,8 +87,6 @@ public class Main extends JFrame implements ActionListener{
 
         //Top panel
         JPanel top = new JPanel();
-        //top.add(file);
-        //top.add(about);
 
         this.add(top,BorderLayout.NORTH);
 
@@ -84,7 +101,6 @@ public class Main extends JFrame implements ActionListener{
         Menu menu=new Menu("File");
         Menu menu2 = new Menu("About");
         menu2.add(about);
-        //All of these need to be replaced with MenuItems
         MenuItem i1=new MenuItem("Load a Roaster");
         i1 actionLoad = new i1();
         i1.addActionListener(actionLoad);
@@ -114,18 +130,16 @@ public class Main extends JFrame implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            //System.out.print("test1");
-            firstRead= getRosterFile(); // uncomment this to see a csv file read
+            firstRead= getRosterFile();
             table(firstRead);
             repaint();
             revalidate();
         }
 
+        //table gets the row data and show them in the table
         public void table(String[][] rows)
         {
-            // Copy and paste this whole section into main to see how table works and looks
             setLayout(new FlowLayout());
-            //System.out.println("table");
             String[] columnNames = {"ID", "First Name", "Last Name", "Program and Plan", "Academic Level", "ASURITE"};
             table = new JTable(rows, columnNames);
             DefaultTableCellRenderer hr = new DefaultTableCellRenderer();
@@ -133,6 +147,8 @@ public class Main extends JFrame implements ActionListener{
             table.getTableHeader().setDefaultRenderer(hr);
             table.setPreferredScrollableViewportSize(new Dimension (800, 300));
             table.setFillsViewportHeight(true);
+            
+            //set the width of each column
             table.getColumnModel().getColumn(0).setPreferredWidth(200);
             table.getColumnModel().getColumn(1).setPreferredWidth(160);
             table.getColumnModel().getColumn(2).setPreferredWidth(160);
@@ -155,43 +171,31 @@ public class Main extends JFrame implements ActionListener{
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             filePath = fc.getSelectedFile();  // gets file path of selected file
-            //System.out.println(filePath);
             try {
-                //System.out.println("br");
                 BufferedReader br = new BufferedReader(new FileReader(filePath));
                 int rowNumber=0;
                 while ((line = br.readLine()) != null)
                 {
-                    //System.out.println(line);
-                    rowNumber++;
+                    rowNumber++;//get the total count of rows
                 }
-                //System.out.println(rowNumber);
-                String[][] totalData=new String[rowNumber][6];
+                String[][] totalData=new String[rowNumber][6];//totalData to store the content read from the file
                 BufferedReader br1 = new BufferedReader(new FileReader(filePath));
                 for(int currentRow=0;currentRow<rowNumber;currentRow++)
                 {
                     line=br1.readLine();
-                    //System.out.println(line);
-                    String[] rowData = line.split(","); // parses data based on ,
-                    //System.out.println(rowData.getClass().getTypeName());
+                    String[] rowData = line.split(","); // parses data based on
                     for(int i=0;i<6;i++) {
-                        //System.out.println(rowData[i]);
                         totalData[currentRow][i]=rowData[i];
                     }
                 }
-                //System.out.println("return");
                 return totalData;
             } catch (FileNotFoundException exception) {
                 exception.printStackTrace();
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
-            //System.out.println(filePath);
-            //System.out.println(rowData[0]);
         }
-
-        //System.out.println("wrong");
-        return null; // ideally return data for table .?
+        return null;
     }
 
 
@@ -219,7 +223,7 @@ public class Main extends JFrame implements ActionListener{
     public class About implements ActionListener {
 
         @Override
-        //Pop-up for the File option
+        //show team information in JDialog
         public void actionPerformed(ActionEvent e) {
             JFrame about = new JFrame("About");
             JDialog info = new JDialog(about, "About"); 
@@ -249,20 +253,20 @@ public class Main extends JFrame implements ActionListener{
             // set visibility of dialog 
             about.setVisible(true);     
         }
-
-
     }
+    
+    //add attendance 
     public class i2 implements ActionListener
     {
 
         @Override
         public void actionPerformed(ActionEvent e)
         {
-        	if(add == 0)
+        	if(add == 0)//no new data added
         	{
-        		//System.out.print("test2");
+        		//it will get the input data as the new column (date and attendance-duration)
         		input = JOptionPane.showInputDialog("Please enter date?");
-        		String[][] attendRows= getAttendanceFile(); // uncomment this to see a csv file read
+        		String[][] attendRows= getAttendanceFile();
         		attendTable2(attendRows);
         		attendTable(firstRead);
         		scrollPane1.removeAll();
@@ -270,10 +274,12 @@ public class Main extends JFrame implements ActionListener{
         		revalidate();
         		add++;
         	}
+        	//already add data
+        	//add all new data to the table and show them
         	else
         	{
         		input = JOptionPane.showInputDialog("Please enter date?");
-        		String[][] attendRows= getAttendanceFile(); // uncomment this to see a csv file read
+        		String[][] attendRows= getAttendanceFile();
                 attendTable2(attendRows);
         		model.addColumn(input);
 
@@ -284,7 +290,6 @@ public class Main extends JFrame implements ActionListener{
                 	table.setValueAt("", x, table.getColumnCount()-1);
                 }
           
-                //table2.setValueAt("7", 1, 6);
                 for(int x = 0; x < table.getRowCount(); x++)
                 {
                 	for(int y = 0; y < smallTable.getRowCount(); y++)
@@ -312,6 +317,8 @@ public class Main extends JFrame implements ActionListener{
                 		counted++;
                 	}
                 }
+                
+                //a new frame of JDialog showing the data-loading information
                 aditional = (smallTable.getRowCount()) - counted;
                 JFrame f = new JFrame(); 
                 
@@ -355,11 +362,9 @@ public class Main extends JFrame implements ActionListener{
 
         public void attendTable(String[][] attendRows)
         {
-            // Copy and paste this whole section into main to see how table works and looks
             setLayout(new FlowLayout());
             JFrame frame = new JFrame("Inserting a Column Example!");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            //System.out.println("attendTable");
             String[] columnNames = {"ID", "First Name", "Last Name", "Program and Plan", "Academic Level", "ASURITE"};
             model = new DefaultTableModel(attendRows, columnNames);
             model.addColumn(input);
@@ -379,8 +384,7 @@ public class Main extends JFrame implements ActionListener{
             {
             	table.setValueAt("", x, 6);
             }
-      
-            //table2.setValueAt("7", 1, 6);
+            
             for(int x = 0; x < table.getRowCount(); x++)
             {
             	for(int y = 0; y < smallTable.getRowCount(); y++)
@@ -454,13 +458,10 @@ public class Main extends JFrame implements ActionListener{
         
         public void attendTable2(String[][] attendRows)
         {
-            // Copy and paste this whole section into main to see how table works and looks
             setLayout(new FlowLayout());
-            //System.out.println("attendTable");
             String[] columnNames = {"ASU ID", "time"};
             smallTable = new JTable(attendRows, columnNames);
             JScrollPane scrollPane = new JScrollPane(smallTable);
-            //add(scrollPane);
         }
     }
 
@@ -471,17 +472,10 @@ public class Main extends JFrame implements ActionListener{
     	@Override
     	public void actionPerformed(ActionEvent e) 
     	{
-    		//System.out.print("test3");
-    		
-    		//System.out.print("Did it Work?");
-    		
-    		//If we have a certain file that we want to save it to
-    		//Change "Book2.csv" to the csv file that reupdate it to
-    		exportToCSV(table, "saveFile.csv");
-  
-    		
+    		exportToCSV(table, "saveFile.csv");	
     	}
     	
+    	//it will check whether the table is empty and finally stores the table content into a csv.file
     	public boolean exportToCSV(JTable table, String file) 
     	{
     		try {
@@ -489,19 +483,20 @@ public class Main extends JFrame implements ActionListener{
     	        TableModel model = table.getModel();
     	        FileWriter csv = new FileWriter(file);
 
+    	        //save the header
     	        for (int i = 0; i < model.getColumnCount(); i++) {
     	            csv.write(model.getColumnName(i) + ",");
     	        }
 
     	        csv.write("\n");
 
+    	        //save the contents
     	        for (int i = 0; i < model.getRowCount(); i++) {
     	            for (int j = 0; j < model.getColumnCount(); j++) {
     	                csv.write(model.getValueAt(i, j).toString() + ",");
     	            }
     	            csv.write("\n");
     	        }
-    	        //System.out.print("Worked");
     	        csv.close();
     	        return true;
     	        
@@ -509,12 +504,11 @@ public class Main extends JFrame implements ActionListener{
     	    } catch (IOException e) {
     	        e.printStackTrace();
     	    }
-    		
-    		 //System.out.print("did NOT Worked");
     	    return false;
     	}
     }
     
+    //print the scatter chart
     public class i4 implements ActionListener
     {
     	@Override
@@ -523,15 +517,16 @@ public class Main extends JFrame implements ActionListener{
     		//final long serialVersionUID = 6294689542092367723L;
     		Main example = new Main("Scatter Chart", table);
     		example.setSize(800, 400);
-    	      example.setLocationRelativeTo(null);
-    	      //example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    	      example.setVisible(true);
+    		example.setLocationRelativeTo(null);
+    	    //example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    	    example.setVisible(true);
     	}
 
     }
    
     
     public XYDataset createDataset(JTable table) {
+    	//initialize ten counters
     	int percent10 = 0;
     	int percent20 = 0;
     	int percent30 = 0;
@@ -545,6 +540,8 @@ public class Main extends JFrame implements ActionListener{
         XYSeriesCollection dataset = new XYSeriesCollection();
 
         	XYSeries series = new XYSeries(((String) table.getColumnName(6)));
+        	//get the time of attending and calculate the percentage
+        	//decide which percent the percentage will fall into and add its count
         	for(int y = 0; y < table.getRowCount(); y++)
         	{
         		if((Double.parseDouble((String)table.getValueAt(y, 6)))/75 < 0.1 )
@@ -611,7 +608,8 @@ public class Main extends JFrame implements ActionListener{
         	percent100 = 0;
         
         
-        if(table.getColumnCount() >= 7)
+        //if there are 7 more columns and we should get data of next several days of attendance
+        if(table.getColumnCount() > 7)
         {
         	XYSeries series2 = new XYSeries(((String) table.getColumnName(7)));
         	for(int y = 0; y < table.getRowCount(); y++)
@@ -680,7 +678,7 @@ public class Main extends JFrame implements ActionListener{
         	percent100 = 0;
         }
 
-        if(table.getColumnCount() >= 8)
+        if(table.getColumnCount() > 8)
         {
         	XYSeries series3 = new XYSeries(((String) table.getColumnName(8)));
         	for(int y = 0; y < table.getRowCount(); y++)
@@ -749,7 +747,7 @@ public class Main extends JFrame implements ActionListener{
         	percent100 = 0;
         }
         
-        if(table.getColumnCount() >= 9)
+        if(table.getColumnCount() > 9)
         {
         	XYSeries series4 = new XYSeries(((String) table.getColumnName(9)));
         	for(int y = 0; y < table.getRowCount(); y++)
@@ -821,6 +819,7 @@ public class Main extends JFrame implements ActionListener{
       }
 
     
+    //get the data of attendance and return the String
     private static String[][] getAttendanceFile(){
         JFileChooser fc = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV FILES", "csv"); // filter only csv files
@@ -831,43 +830,32 @@ public class Main extends JFrame implements ActionListener{
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             filePath = fc.getSelectedFile();  // gets file path of selected file
-            //System.out.println(filePath);
             try {
-                //System.out.println("br");
                 BufferedReader br = new BufferedReader(new FileReader(filePath));
                 int rowNumber=0;
                 while ((line = br.readLine()) != null)
                 {
-                    //System.out.println(line);
                     rowNumber++;
                 }
-                //System.out.println(rowNumber);
                 String[][] totalData=new String[rowNumber][2];
                 BufferedReader br1 = new BufferedReader(new FileReader(filePath));
                 for(int currentRow=0;currentRow<rowNumber;currentRow++)
                 {
                     line=br1.readLine();
-                    //System.out.println(line);
                     String[] rowData = line.split(","); // parses data based on ,
-                    //System.out.println(rowData.getClass().getTypeName());
                     for(int i=0;i<2;i++) {
-                        //System.out.println(rowData[i]);
                         totalData[currentRow][i]=rowData[i];
                     }
                 }
-                //System.out.println("return");
                 return totalData;
             } catch (FileNotFoundException exception) {
                 exception.printStackTrace();
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
-            //System.out.println(filePath);
-            //System.out.println(rowData[0]);
         }
 
-        //System.out.println("wrong");
-        return null; // ideally return data for table .?
+        return null;
     }
 
     
@@ -876,6 +864,7 @@ public class Main extends JFrame implements ActionListener{
     	  }
 
 
+    //draw the scatter chart
     public Main(String title, JTable table) {
     	super(title);
 
