@@ -11,6 +11,14 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
+import org.jfree.chart.ChartFactory;  
+import org.jfree.chart.ChartPanel;  
+import org.jfree.chart.JFreeChart;  
+import org.jfree.chart.plot.XYPlot;  
+import org.jfree.data.xy.XYDataset;  
+import org.jfree.data.xy.XYSeries;  
+import org.jfree.data.xy.XYSeriesCollection;  
+
 
 /*
  * Description: Main GUI for the final project
@@ -19,7 +27,7 @@ import javax.swing.table.TableModel;
 
 public class Main extends JFrame implements ActionListener{
 
-
+	
     private static final long serialVersionUID = 1L;
     //Sizes of main GUI
     private static final int FRAME_WIDTH = 850;
@@ -40,6 +48,7 @@ public class Main extends JFrame implements ActionListener{
     int counted = 0;
     int add = 0;
     String input;
+    
 
 
     public Main() {
@@ -86,6 +95,8 @@ public class Main extends JFrame implements ActionListener{
         i3 save = new i3();
         i3.addActionListener(save);
         MenuItem i4=new MenuItem("Plot data");
+        i4 plot = new i4();
+        i4.addActionListener(plot);
         menu.add(i1);
         menu.add(i2);
         menu.add(i3);
@@ -504,6 +515,312 @@ public class Main extends JFrame implements ActionListener{
     	}
     }
     
+    public class i4 implements ActionListener
+    {
+    	@Override
+    	public void actionPerformed(ActionEvent e) 
+    	{
+    		//final long serialVersionUID = 6294689542092367723L;
+    		Main example = new Main("Scatter Chart", table);
+    		example.setSize(800, 400);
+    	      example.setLocationRelativeTo(null);
+    	      //example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    	      example.setVisible(true);
+    	}
+
+    }
+   
+    
+    public XYDataset createDataset(JTable table) {
+    	int percent10 = 0;
+    	int percent20 = 0;
+    	int percent30 = 0;
+    	int percent40 = 0;
+    	int percent50 = 0;
+    	int percent60 = 0;
+    	int percent70 = 0;
+    	int percent80 = 0;
+    	int percent90 = 0;
+    	int percent100 = 0;
+        XYSeriesCollection dataset = new XYSeriesCollection();
+
+        	XYSeries series = new XYSeries(((String) table.getColumnName(6)));
+        	for(int y = 0; y < table.getRowCount(); y++)
+        	{
+        		if((Double.parseDouble((String)table.getValueAt(y, 6)))/75 < 0.1 )
+        		{
+        			percent10++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 6)))/75 < 0.2 )
+        		{
+        			percent20++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 6)))/75 < 0.3 )
+        		{
+        			percent30++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 6)))/75 < 0.4 )
+        		{
+        			percent40++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 6)))/75 < 0.5 )
+        		{
+        			percent50++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 6)))/75 < 0.6 )
+        		{
+        			percent60++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 6)))/75 < 0.7 )
+        		{
+        			percent70++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 6)))/75 < 0.8 )
+        		{
+        			percent80++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 6)))/75 < 0.9 )
+        		{
+        			percent90++;
+        		}
+        		else
+        		{
+        			percent100++;
+        		}
+        	}
+        	series.add(10,percent10);
+        	series.add(20,percent20);
+        	series.add(30,percent30);
+        	series.add(40,percent40);
+        	series.add(50,percent50);
+        	series.add(60,percent60);
+        	series.add(70,percent70);
+        	series.add(80,percent80);
+        	series.add(90,percent90);
+        	series.add(100,percent100);
+        	dataset.addSeries(series);
+        	percent10 = 0;
+        	percent20 = 0;
+        	percent30 = 0;
+        	percent40 = 0;
+        	percent50 = 0;
+        	percent60 = 0;
+        	percent70 = 0;
+        	percent80 = 0;
+        	percent90 = 0;
+        	percent100 = 0;
+        
+        
+        if(table.getColumnCount() >= 7)
+        {
+        	XYSeries series2 = new XYSeries(((String) table.getColumnName(7)));
+        	for(int y = 0; y < table.getRowCount(); y++)
+        	{
+        		if((Double.parseDouble((String)table.getValueAt(y, 7)))/75 < 0.1 )
+        		{
+        			percent10++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 7)))/75 < 0.2 )
+        		{
+        			percent20++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 7)))/75 < 0.3 )
+        		{
+        			percent30++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 7)))/75 < 0.4 )
+        		{
+        			percent40++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 7)))/75 < 0.5 )
+        		{
+        			percent50++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 7)))/75 < 0.6 )
+        		{
+        			percent60++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 7)))/75 < 0.7 )
+        		{
+        			percent70++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 7)))/75 < 0.8 )
+        		{
+        			percent80++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 7)))/75 < 0.9 )
+        		{
+        			percent90++;
+        		}
+        		else
+        		{
+        			percent100++;
+        		}
+        	}
+        	series2.add(10,percent10);
+        	series2.add(20,percent20);
+        	series2.add(30,percent30);
+        	series2.add(40,percent40);
+        	series2.add(50,percent50);
+        	series2.add(60,percent60);
+        	series2.add(70,percent70);
+        	series2.add(80,percent80);
+        	series2.add(90,percent90);
+        	series2.add(100,percent100);
+        	dataset.addSeries(series2);
+        	percent10 = 0;
+        	percent20 = 0;
+        	percent30 = 0;
+        	percent40 = 0;
+        	percent50 = 0;
+        	percent60 = 0;
+        	percent70 = 0;
+        	percent80 = 0;
+        	percent90 = 0;
+        	percent100 = 0;
+        }
+
+        if(table.getColumnCount() >= 8)
+        {
+        	XYSeries series3 = new XYSeries(((String) table.getColumnName(8)));
+        	for(int y = 0; y < table.getRowCount(); y++)
+        	{
+        		if((Double.parseDouble((String)table.getValueAt(y, 8)))/75 < 0.1 )
+        		{
+        			percent10++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 8)))/75 < 0.2 )
+        		{
+        			percent20++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 8)))/75 < 0.3 )
+        		{
+        			percent30++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 8)))/75 < 0.4 )
+        		{
+        			percent40++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 8)))/75 < 0.5 )
+        		{
+        			percent50++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 8)))/75 < 0.6 )
+        		{
+        			percent60++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 8)))/75 < 0.7 )
+        		{
+        			percent70++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 8)))/75 < 0.8 )
+        		{
+        			percent80++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 8)))/75 < 0.9 )
+        		{
+        			percent90++;
+        		}
+        		else
+        		{
+        			percent100++;
+        		}
+        	}
+        	series3.add(10,percent10);
+        	series3.add(20,percent20);
+        	series3.add(30,percent30);
+        	series3.add(40,percent40);
+        	series3.add(50,percent50);
+        	series3.add(60,percent60);
+        	series3.add(70,percent70);
+        	series3.add(80,percent80);
+        	series3.add(90,percent90);
+        	series3.add(100,percent100);
+        	dataset.addSeries(series3);
+        	percent10 = 0;
+        	percent20 = 0;
+        	percent30 = 0;
+        	percent40 = 0;
+        	percent50 = 0;
+        	percent60 = 0;
+        	percent70 = 0;
+        	percent80 = 0;
+        	percent90 = 0;
+        	percent100 = 0;
+        }
+        
+        if(table.getColumnCount() >= 9)
+        {
+        	XYSeries series4 = new XYSeries(((String) table.getColumnName(9)));
+        	for(int y = 0; y < table.getRowCount(); y++)
+        	{
+        		if((Double.parseDouble((String)table.getValueAt(y, 9)))/75 < 0.1 )
+        		{
+        			percent10++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 9)))/75 < 0.2 )
+        		{
+        			percent20++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 9)))/75 < 0.3 )
+        		{
+        			percent30++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 9)))/75 < 0.4 )
+        		{
+        			percent40++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 9)))/75 < 0.5 )
+        		{
+        			percent50++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 9)))/75 < 0.6 )
+        		{
+        			percent60++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 9)))/75 < 0.7 )
+        		{
+        			percent70++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 9)))/75 < 0.8 )
+        		{
+        			percent80++;
+        		}
+        		else if ((Double.parseDouble((String)table.getValueAt(y, 9)))/75 < 0.9 )
+        		{
+        			percent90++;
+        		}
+        		else
+        		{
+        			percent100++;
+        		}
+        	}
+        	series4.add(10,percent10);
+        	series4.add(20,percent20);
+        	series4.add(30,percent30);
+        	series4.add(40,percent40);
+        	series4.add(50,percent50);
+        	series4.add(60,percent60);
+        	series4.add(70,percent70);
+        	series4.add(80,percent80);
+        	series4.add(90,percent90);
+        	series4.add(100,percent100);
+        	dataset.addSeries(series4);
+        	percent10 = 0;
+        	percent20 = 0;
+        	percent30 = 0;
+        	percent40 = 0;
+        	percent50 = 0;
+        	percent60 = 0;
+        	percent70 = 0;
+        	percent80 = 0;
+        	percent90 = 0;
+        	percent100 = 0;
+        }
+        return dataset;
+      }
+
+    
     private static String[][] getAttendanceFile(){
         JFileChooser fc = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV FILES", "csv"); // filter only csv files
@@ -559,6 +876,28 @@ public class Main extends JFrame implements ActionListener{
     	  }
 
 
+    public Main(String title, JTable table) {
+    	super(title);
+
+        // Create dataset
+        XYDataset dataset = createDataset(table);
+
+        // Create chart
+        JFreeChart chart = ChartFactory.createScatterPlot(
+            "Attendance Scatter Plot", 
+            "X-Axis", "Y-Axis", dataset);
+
+        
+        //Changes background color
+        XYPlot plot = (XYPlot)chart.getPlot();
+        plot.setBackgroundPaint(new Color(255,228,196));
+        
+       
+        // Create Panel
+        ChartPanel panel = new ChartPanel(chart);
+        setContentPane(panel);
+      }
+    
     public static void main(String[] args) {
         Main main = new Main();
 
